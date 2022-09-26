@@ -9,6 +9,7 @@ function App() {
   const [start, setStart] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [questions, setQuestions] = useState([])
+  const [score, setScore] = useState(0)
 
   useEffect(()=>{
     if(start===true){
@@ -28,14 +29,70 @@ function App() {
     }
   },[start])
 
-  console.log(questions)
-
   function startGame(){
     setStart(true)
   }
 
+  function selectAnswer(questId, optionId){
+    setQuestions(prevArray=>{
+      let optionsArray = undefined;
+      for(let i = 0; i <prevArray.length; i++){
+        if(prevArray[i].id===questId){
+          optionsArray = prevArray[i].options
+        }
+      }
+      const allFalse = optionsArray.every(item=>item.selected===false)
+
+      if(allFalse){
+        return prevArray.map(quest=>{
+          if(quest.id === questId){
+            return {...quest, options: quest.options.map(option=>{
+              if(option.id===optionId){
+                return {...option, selected: !option.selected}
+              } else {
+                return option
+              }
+            })}
+          }else {
+            return quest
+          }
+        })
+      }else {
+        prevArray = prevArray.map(quest=>{
+          if(quest.id===questId){
+            return {
+              ...quest,
+              options: quest.options.map(option=>{
+                return {
+                  ...option,
+                  selected: false
+                }
+              })
+            }
+          }else {
+            return quest
+          }
+       })
+        return prevArray.map(quest=>{
+          if(quest.id === questId){
+            return {...quest, options: quest.options.map(option=>{
+              if(option.id===optionId){
+                return {...option, selected: !option.selected}
+              } else {
+                return option
+              }
+            })}
+          }else {
+            return quest
+          }
+        })
+      }
+    })
+  }
+
   function checkAnswers(){
     setIsChecked(true)
+    
   }
 
   function playAgain(){
@@ -44,19 +101,13 @@ function App() {
     setQuestions([])
   }
 
-  function selectAnswer(id){
-    setQuestions(prevArray=>{
-      //make it possible to select an answer
-      return prevArray
-    })
-  }
-
   const Questions = questions.map(quest=>{
     return <Question 
       questionTitle={quest.question}
       options={quest.options}
       key={quest.id}
       selectAnswer={selectAnswer}
+      id={quest.id}
     />
   })
 
@@ -72,7 +123,7 @@ function App() {
           {Questions}
           { isChecked && 
             <div className='play-again'>
-              <p>You scored 3/5 correct answers</p>
+              <p>You scored {score}/5 correct answers</p>
               <button onClick={playAgain}>Play again</button>
             </div>
           }

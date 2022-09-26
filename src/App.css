@@ -141,27 +141,6 @@ footer h3{
   font-size: 1.1rem;
 }
 
-@media screen and (min-width:992px) {
-  .play-again{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 70%;
-  }
-  .play-again button{
-    padding: 2% 8%;
-    width: 40%;
-    margin-top: 0%;
-  }
-  .answers{
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
-  .checkAnswers{
-    padding: 2% 8%;
-  }
-}
-
 .secondPage{
   display: flex;
   flex-direction: column;
@@ -193,4 +172,25 @@ footer h3{
   margin-bottom: 5%;
   font-size: 1.1rem;
   color: #293264;
+}
+
+@media screen and (min-width:992px) {
+  .play-again{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+  }
+  .play-again button{
+    padding: 2% 8%;
+    width: 40%;
+    margin-top: 0%;
+  }
+  .answers{
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  .checkAnswers{
+    padding: 2% 8%;
+  }
 }

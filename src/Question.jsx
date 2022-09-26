@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Question({ questionTitle, options, selectAnswer }) {
+export default function Question({ questionTitle, options, selectAnswer, id }) {
 
     const answers = options.map((ans)=>{
 
@@ -19,7 +19,7 @@ export default function Question({ questionTitle, options, selectAnswer }) {
         }
 
         return (
-            <div style={styles} key={ans.id} onClick={()=>selectAnswer(ans.id)}>
+            <div style={styles} key={ans.id} onClick={()=>selectAnswer(id, ans.id)}>
                 <p>{ans.value}</p>
             </div>
         )
