@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { FaGithub , FaLinkedin, FaTwitter} from 'react-icons/fa'
+import { FaGithub , FaLinkedin, FaTwitter, FaSun, FaMoon} from 'react-icons/fa'
 import Question from './Question'
 import { nanoid } from 'nanoid'
 
@@ -10,10 +10,11 @@ function App() {
   const [isChecked, setIsChecked] = useState(false)
   const [questions, setQuestions] = useState([])
   const [score, setScore] = useState(0)
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(()=>{
     if(start===true){
-      fetch("https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=5&region=NG&difficulty=medium")
+      fetch("https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=10&region=NG&difficulty=medium")
     .then(res=>res.json())
     .then(data=>setQuestions(data.map(quest=>{
       return ({
@@ -171,31 +172,45 @@ function App() {
       id={quest.id}
       correctAnswer={quest.correctAnswer}
       selectedAnswer={quest.selectedAnswer}
+      darkMode={darkMode}
     />
   })
 
+  function toggleDarkMode(){
+    setDarkMode(prevDarkMode=>!prevDarkMode)
+  }
+
   const mainStyle={
     height : start ? "100%" : "80vh",
+    background: darkMode ? "url(../background2.png) center" : "url(../background1.png) center",
+    backgroundSize: "cover"
   }
 
   return (
    <>
     <main style={mainStyle}>
+      <div className='toggler'>
+        <p className={darkMode ? "toggler-item-dark" : 'toggler-item'}><FaSun /></p>
+        <div onClick={toggleDarkMode} className={darkMode ? "color-toggler-dark" : "color-toggler"}>
+          <div className={darkMode ? 'toggler-slider-dark' : 'toggler-slider'}></div>
+        </div>
+        <p className={darkMode ? "toggler-item-dark" : 'toggler-item'}><FaMoon /></p>
+      </div>
       {start ? 
         <div className='secondPage'>
           {Questions}
           { isChecked && 
-            <div className='play-again'>
-              <p>You scored {score}/5 correct answers</p>
+            <div className={darkMode ? 'play-again-dark' : 'play-again'}>
+              <p>You scored {score}/10 correct answers</p>
               <button onClick={playAgain}>Play again</button>
             </div>
           }
           { !isChecked && 
-            <button className='checkAnswers' onClick={checkAnswers}>Check Answers</button> 
+            <button className={darkMode ? 'checkAnswers-dark' : 'checkAnswers'} onClick={checkAnswers}>Check Answers</button> 
           }
         </div> :
         
-        <div className='firstPage'>
+        <div className={darkMode ? 'firstPage-dark' : 'firstPage'}>
           <h1>Quizzical</h1>
           <p>Fun trivia Game on the go</p>
           <button onClick={startGame}>Start Quiz</button>
