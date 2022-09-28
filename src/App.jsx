@@ -221,7 +221,7 @@ function App() {
         <h3>Spandor's Work</h3>
         <div className='icons'>
           <a href='https://github.com/Ay7ot' className='icon-tags'><FaGithub /></a>
-          <a href='https://twitter.com/Spandor_7nr' className='icon-tags'><FaTwitter /></a>
+          <a href='https://twitter.com/Spandor_Jnr' className='icon-tags'><FaTwitter /></a>
           <a href='https://www.linkedin.com/in/ayomide-ibiteye-b124b823b/' className='icon-tags'><FaLinkedin/></a>
         </div>
       </footer>
