@@ -223,9 +223,9 @@ function App() {
           <p>Fun trivia Game on the go</p>
 
           <form>
-            <label htmlFor='difficulty'>Set Difficulty :</label>
+            <label htmlFor='difficulty'>Set Difficulty </label>
             <br />
-            <select id='difficulty' onChange={handleDifficulty} className="select">
+            <select id='difficulty' onChange={handleDifficulty} className={darkMode ? "select-dark" : ""}>
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
               <option value="hard">Hard</option>

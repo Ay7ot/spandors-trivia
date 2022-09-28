@@ -123,6 +123,10 @@ select{
   font-family: Rubik, sans-serif;
 }
 
+.select-dark{
+  background-color: #e0f2f7;
+}
+
 .firstPage{
   text-align: center;
 }
