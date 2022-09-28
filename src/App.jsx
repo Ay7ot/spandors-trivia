@@ -22,12 +22,24 @@ function App() {
         correctAnswer: quest.correctAnswer,
         id: quest.id,
         options: quest.incorrectAnswers.concat([quest.correctAnswer]).sort(()=>Math.random()-0.5).map(item=>(
-          {value: item, selected: false, id: nanoid()}
+          {value: item, selected: false, id: nanoid(), isCorrect: undefined}
         ))    
       })
     })))
     }
   },[start])
+
+  useEffect(()=>{
+    let count = 0;
+    for(let i = 0; i < questions.length; i++){
+      if(questions[i].selectedAnswer !== undefined){
+        if(questions[i].selectedAnswer === questions[i].correctAnswer){
+          count++
+        }
+      }
+    }
+    setScore(count)
+  },[isChecked])
 
   function startGame(){
     setStart(true)
@@ -35,29 +47,33 @@ function App() {
 
   function selectAnswer(questId, optionId){
     setQuestions(prevArray=>{
-      let optionsArray = undefined;
+      let optionsArray = null;
       for(let i = 0; i <prevArray.length; i++){
         if(prevArray[i].id===questId){
           optionsArray = prevArray[i].options
         }
       }
       const allFalse = optionsArray.every(item=>item.selected===false)
-
+      
       if(allFalse){
         return prevArray.map(quest=>{
           if(quest.id === questId){
-            return {...quest, options: quest.options.map(option=>{
-              if(option.id===optionId){
-                return {...option, selected: !option.selected}
-              } else {
-                return option
-              }
-            })}
+            return {
+              ...quest, 
+              options: quest.options.map(option=>{
+                if(option.id===optionId){
+                  return {...option, selected: !option.selected}
+                } else {
+                  return option
+                }
+              }),
+              selectedAnswer: quest.options.find(option=>option.id===optionId).value
+            }
           }else {
             return quest
           }
         })
-      }else {
+      } else {
         prevArray = prevArray.map(quest=>{
           if(quest.id===questId){
             return {
@@ -72,16 +88,21 @@ function App() {
           }else {
             return quest
           }
-       })
+        })
         return prevArray.map(quest=>{
           if(quest.id === questId){
-            return {...quest, options: quest.options.map(option=>{
-              if(option.id===optionId){
-                return {...option, selected: !option.selected}
-              } else {
-                return option
-              }
-            })}
+            return {
+              ...quest, 
+              options: quest.options.map(option=>{
+                if(option.id===optionId){
+                  return {...option, selected: !option.selected}
+                } else {
+                  return option
+                }
+              }),
+              selectedAnswer: quest.options.find(option=>option.id===optionId).value
+            }
+
           }else {
             return quest
           }
@@ -91,7 +112,46 @@ function App() {
   }
 
   function checkAnswers(){
-    setIsChecked(true)
+    const allDone = questions.every(quest=>quest.selectedAnswer !== undefined)
+    if (allDone){
+      setIsChecked(true)
+      setQuestions(prevQuest=>{
+        return prevQuest.map(quest=>{
+          if(quest.selectedAnswer===quest.correctAnswer){
+            return {
+              ...quest,
+              options: quest.options.map(option=>{
+              if(option.value === quest.selectedAnswer){
+                return {
+                  ...option, isCorrect: true, selected: false
+                }
+              } else return {...option, selected:false}
+              }) 
+            }
+          }else{
+            const actuallyCorrect = quest.options.find(option=>option.value===quest.correctAnswer).value 
+            return {
+              ...quest,
+              options: quest.options.map(option=>{ 
+                if(option.value===quest.selectedAnswer){
+                  return {
+                    ...option, isCorrect: false, selected: false
+                  }
+                }else if(option.value===actuallyCorrect){
+                  return {
+                    ...option, isCorrect:true, selected:false
+                  }
+                }else return {...option, selected:false}
+              })
+            }
+          }
+          
+        })
+      })
+    }else{
+      setIsChecked(prevCheck=>prevCheck)
+      setQuestions(prevQuestions=>prevQuestions)
+    }
     
   }
 
@@ -99,6 +159,7 @@ function App() {
     setStart(false)
     setIsChecked(false)
     setQuestions([])
+    setScore(0)
   }
 
   const Questions = questions.map(quest=>{
@@ -108,6 +169,8 @@ function App() {
       key={quest.id}
       selectAnswer={selectAnswer}
       id={quest.id}
+      correctAnswer={quest.correctAnswer}
+      selectedAnswer={quest.selectedAnswer}
     />
   })
 
