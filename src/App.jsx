@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid'
 function App() {
 
   const [start, setStart] = useState(false)
+  const [difficulty, setDifficulty] = useState("easy")
   const [isChecked, setIsChecked] = useState(false)
   const [questions, setQuestions] = useState([])
   const [score, setScore] = useState(0)
@@ -14,7 +15,7 @@ function App() {
 
   useEffect(()=>{
     if(start===true){
-      fetch("https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=10&region=NG&difficulty=medium")
+      fetch(`https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=10&region=NG&difficulty=${difficulty}`)
     .then(res=>res.json())
     .then(data=>setQuestions(data.map(quest=>{
       return ({
@@ -45,6 +46,11 @@ function App() {
   function startGame(){
     setStart(true)
   }
+
+  function handleDifficulty(event){
+    setDifficulty(event.target.value)
+  }
+
 
   function selectAnswer(questId, optionId){
     setQuestions(prevArray=>{
@@ -199,6 +205,7 @@ function App() {
       {start ? 
         <div className='secondPage'>
           {Questions}
+
           { isChecked && 
             <div className={darkMode ? 'play-again-dark' : 'play-again'}>
               <p>You scored {score}/10 correct answers</p>
@@ -208,14 +215,26 @@ function App() {
           { !isChecked && 
             <button className={darkMode ? 'checkAnswers-dark' : 'checkAnswers'} onClick={checkAnswers}>Check Answers</button> 
           }
+
         </div> :
         
         <div className={darkMode ? 'firstPage-dark' : 'firstPage'}>
           <h1>Quizzical</h1>
           <p>Fun trivia Game on the go</p>
+
+          <form>
+            <label htmlFor='difficulty'>Set Difficulty :</label>
+            <br />
+            <select id='difficulty' onChange={handleDifficulty} className="select">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </form>
+
           <button onClick={startGame}>Start Quiz</button>
         </div>
-        }
+      }
     </main>
     <footer>
         <h3>Spandor's Work</h3>
