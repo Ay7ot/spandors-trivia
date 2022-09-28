@@ -34,6 +34,12 @@ main{
   height: 25px;
 }
 
+@media screen and (min-width:992px){
+  .toggler{
+    width: 20%;
+  }
+}
+
 .color-toggler{
   width: 50px;
   border: 1px solid #383839;
