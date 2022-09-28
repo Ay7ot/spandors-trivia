@@ -182,7 +182,7 @@ function App() {
 
   const mainStyle={
     height : start ? "100%" : "80vh",
-    background: darkMode ? "url(../background5.png) center" : "url(../background4.png) center",
+    background: darkMode ? "url(../background6.png) center" : "url(../background4.png) center",
     backgroundSize: "cover"
   }
 
