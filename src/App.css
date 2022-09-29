@@ -108,11 +108,16 @@ form{
   align-items: center;
   justify-content: space-between;
   margin-bottom: 5%;
+  flex-direction: column;
 }
 
 form label{
   font-weight: 500;
   color: #4D5B9E;
+}
+
+.difficulty{
+  margin-top: 5%;
 }
 
 select{

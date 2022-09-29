@@ -8,6 +8,7 @@ function App() {
 
   const [start, setStart] = useState(false)
   const [difficulty, setDifficulty] = useState("easy")
+  const [categories, setCategories] = useState("general_knowledge")
   const [isChecked, setIsChecked] = useState(false)
   const [questions, setQuestions] = useState([])
   const [score, setScore] = useState(0)
@@ -15,7 +16,7 @@ function App() {
 
   useEffect(()=>{
     if(start===true){
-      fetch(`https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=10&region=NG&difficulty=${difficulty}`)
+      fetch(`https://the-trivia-api.com/api/questions?categories=${categories}&limit=10&region=NG&difficulty=${difficulty}`)
     .then(res=>res.json())
     .then(data=>setQuestions(data.map(quest=>{
       return ({
@@ -43,12 +44,18 @@ function App() {
     setScore(count)
   },[isChecked])
 
+  console.log(categories)
+
   function startGame(){
     setStart(true)
   }
 
   function handleDifficulty(event){
     setDifficulty(event.target.value)
+  }
+
+  function handleCategories(event){
+    setCategories(event.target.value)
   }
 
 
@@ -223,13 +230,29 @@ function App() {
           <p>Fun trivia Game on the go</p>
 
           <form>
-            <label htmlFor='difficulty'>Set Difficulty </label>
-            <br />
-            <select id='difficulty' onChange={handleDifficulty} className={darkMode ? "select-dark" : ""}>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
+            <div>
+              <label htmlFor='categories'>Set Category </label>
+              <select id='categories' onChange={handleCategories}>
+                <option value='general_knowledge'>General Knowledge</option>
+                <option value='arts_and_literature'>Arts &amp; Literature</option>
+                <option value='film_and_tv'>Film and TV</option>
+                <option value='food_and_drink'>Food and Drink</option>
+                <option value='geography'>Geography</option>
+                <option value='history'>History</option>
+                <option value='music'>Music</option>
+                <option value='science'>Science</option>
+                <option value='society_and_culture'>Society &amp; Culture</option>
+                <option value='sport_and_leisure'>Sport and Leisure</option>
+              </select>
+            </div>
+           <div className='difficulty'>
+              <label htmlFor='difficulty'>Set Difficulty </label>
+              <select id='difficulty' onChange={handleDifficulty} className={darkMode ? "select-dark" : ""}>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+           </div>
           </form>
 
           <button onClick={startGame}>Start Quiz</button>
